@@ -1,0 +1,84 @@
+
+        .card {
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .calendar-card, .event-viewer-card {
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            height: 70vh; /* Adjust height as needed */
+            overflow: hidden; /* Prevent overflow */
+        }
+        .calendar {
+            height: calc(100% - 50px); /* Adjust height to fit in the container */
+            overflow-y: auto; /* Scroll vertically if needed */
+        }
+        .event-list {
+            list-style: none;
+            padding: 0;
+        }
+        .event-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+            padding: 5px 0;
+        }
+        .event-list li:last-child {
+            border-bottom: none;
+        }
+        .add-event-btn {
+            margin-top: 15px; /* Add some space above the button */
+        }
+        .fc-today-button {
+            background-color: #006400 !important; /* Success color */
+            border: none;
+            color: white;
+        }
+        .fc-today-button:hover {
+            background-color:  #5cb85c !important; /* Darker shade on hover */
+        }
+        .fc-prev-button, .fc-next-button {
+            background-color: #006400 !important; /* Success color */
+            border: none;
+            color: white;
+        }
+        
+        .fc-prev-button:hover, .fc-next-button:hover {
+            background-color: #5cb85c !important; /* Darker shade on hover */
+        }
+        .add-event-btn:hover {
+            background-color: #5cb85c; /* Darker shade on hover */
+        }
+        .add-event-btn {
+            background-color: #004d00; /* Darker shade on hover */
+        }
+            /* Change text color of days and dates to black */
+            .fc-daygrid-day .fc-daygrid-day-number {
+            color: black !important;
+        }
+        .fc-daygrid-day-header {
+            color: black !important;
+        }
+        .fc-daygrid-day-number, .fc-daygrid-day-top {
+            color: black !important;
+        }
+
+        .fc-daygrid-day-header {
+            color: black !important;
+        }
+
+        .fc-col-header-cell, .fc-col-header-cell-cushion {
+            color: black !important;
+        }
+
+        .fc-col-header-cell-content {
+            color: black !important;
+        }
+
+        .fc-daygrid-day {
+            color: black !important;
+        }
+ 

@@ -1,0 +1,132 @@
+.content-wrapper {
+    max-width: 100%;
+    position: relative; /* Keep position relative for layout */
+    overflow: hidden;
+    background-color: #f9f9f9; /* Background color for visibility */
+}
+
+/* Overall chat container styles */
+.chat-container {
+    display: flex; /* Main container as a flex container */
+    height: 80vh; /* Height takes a portion of the viewport */
+}
+
+/* User list styles */
+#user-list {
+    list-style: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+    cursor: pointer; /* Pointer cursor for clickable items */
+}
+
+/* User item styles */
+.user-chat {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    padding: 15px; /* Increased padding for each user item */
+    border-bottom: 1px solid #e0e0e0; /* Subtle separator line between users */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* Spacing between users */
+.user-chat:not(:last-child) {
+    margin-bottom: 5px; /* Add spacing between user items */
+}
+
+.user-chat:hover {
+    background-color: rgba(0, 100, 0, 1) !important; /* Light background on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+.user-chat {
+    font-size: 16px; /* Font size for the user name */
+    color: #333; /* Text color */
+}
+
+
+/* Conversation styles */
+.conversation {
+    display: flex; /* Use flexbox for the conversation area */
+    flex-direction: column; /* Stack children vertically */
+    flex-grow: 1; /* Take remaining space */
+    background-color: #fff; /* Background for conversation */
+}
+
+/* Header styles for the conversation */
+.conversation-header {
+    padding: 15px; /* Padding for header */
+    background-color: #f1f1f1; /* Light background for header */
+    border-bottom: 2px solid #ccc; /* Thicker border for separation */
+}
+
+/* Messages container styles */
+#messages-container {
+    display: flex; /* Use flexbox for messages */
+    flex-direction: column; /* Stack messages vertically */
+    padding: 10px;
+    flex-grow: 1; /* Take remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-color: #fafafa; /* Light background for messages area */
+}
+
+/* Individual message styles */
+.message {
+    width: fit-content;
+    margin: 10px 0; /* Space between messages */
+    padding: 10px; /* Padding inside messages */
+    border-radius: 20px; /* Rounded corners */
+    max-width: 75%; /* Adjusted max width of messages */
+    word-wrap: break-word; /* Allow breaking long words */
+}
+
+/* Styles for sent messages */
+.message.sent {
+    background-color: rgba(0, 100, 0, 1) !important; /* Background for sent messages */
+    color: #fff; /* Text color for sent messages */
+    margin-left: auto; /* Align to the right */
+}
+
+/* Styles for received messages */
+.message.received {
+    background-color: #e5e5ea; /* Background for received messages */
+    color: #000; /* Text color for received messages */
+}
+
+/* Message input container styles */
+.message-input-container {
+    display: flex; /* Flexbox for aligning input and button */
+    padding: 10px; /* Add padding */
+    border-top: 2px solid #ccc; /* Thicker top border for separation */
+    background-color: #fff; /* Background for input area */
+}
+
+/* Styles for the input field */
+.message-input-container input[type="text"] {
+    flex-grow: 1; /* Take available space */
+    padding: 12px; /* Padding for input */
+    border: 1px solid #ccc; /* Border for input */
+    border-radius: 20px; /* Rounded corners */
+    font-size: 16px; /* Increased font size */
+}
+
+/* Styles for the send button */
+.message-input-container button {
+    padding: 12px 20px; /* Padding for button */
+    margin-left: 10px; /* Space between input and button */
+    border: none; /* Remove border */
+    background-color: rgba(0, 100, 0, 1) !important; /* Button background */
+    color: white; /* Button text color */
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.message-input-container button:hover {
+    background-color: #005bb5; /* Darker shade on hover */
+}
+
+/* Highlight class for users with unread messages */
+.user-chat:hover .badge {
+    background-color: #926f07 !important; /* Bootstrap warning color */
+    color: #fff; /* Change text color to white for better contrast */
+}
