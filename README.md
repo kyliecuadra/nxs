@@ -50,9 +50,9 @@ The **NXS Spa Web-Based Pointing/Management System** is a web-based management t
 
   - Create a database named nxs.
   - Import the provided nxs.sql file to set up the tables:
-  ```bash
-   mysql -u root -p nxs < nxs.sql
-  ```
+    ```bash
+     mysql -u root -p nxs < nxs.sql
+    ```
 4. **Configure the Web Server:**
 
   - Place the project files in the htdocs directory of your XAMPP installation (e.g., C:\xampp\htdocs\spa_system).
