@@ -8686,7 +8686,6 @@ html:not([dir="rtl"])
 }
 .nav-tabs .nav-item .nav-link {
   color: #000;
-  border: 0;
   border-radius: 0;
 }
 .nav-tabs .nav-item .nav-link:hover,
@@ -8694,7 +8693,7 @@ html:not([dir="rtl"])
   color: #566a7f;
 }
 .nav-tabs .nav-item .nav-link:not(.active) {
-  background-color: #006400;
+  background-color: #B59410;
   color: #fff;
 }
 .nav-tabs .nav-item .nav-link.disabled {

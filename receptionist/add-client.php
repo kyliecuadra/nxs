@@ -1,3 +1,17 @@
+<?php
+require("../config/db_connection.php");
+
+session_start();
+require("../config/session_timeout.php");
+
+if (!isset($_SESSION['id'])) {
+  header("location: ../config/not_login-error.html");
+} else {
+  if ($_SESSION['role'] != "receptionist") {
+    header("location: ../config/user_level-error.html");
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
     data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template">
@@ -99,7 +113,7 @@
 
         <!-- Confirmation Modal -->
         <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="confirmationModalLabel">Double Check Your Information</h5>
@@ -109,7 +123,7 @@
                         <p>Please double-check your information before saving.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
                         <button type="button" class="btn btn-primary" id="confirmSaveBtn">Save</button>
                     </div>
                 </div>
@@ -133,25 +147,63 @@
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
     <!-- Page JS -->
-
-    <script>
-        document.getElementById('saveClientBtn').addEventListener('click', function() {
-            // Show the confirmation modal when Save Client is clicked
-            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-            confirmationModal.show();
+<script>
+    $(document).ready(function() {
+        // Handle Save Client button click
+        $('#saveClientBtn').on('click', function() {
+            // Get form values
+            const username = $('#username').val();
+            const name = $('#name').val();
+            const email = $('#email').val();
+            const contactNumber = $('#contactNumber').val();
+            
+            // Check if required fields are filled
+            if (username && name && email) {
+                // Show confirmation modal
+                $('#confirmationModal').modal('show');
+            } else {
+                alert('Please fill in all required fields!');
+            }
         });
 
-        document.getElementById('confirmSaveBtn').addEventListener('click', function() {
-            // Close the confirmation modal
-            const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
-            confirmationModal.hide();
+        // Handle confirmation of saving client
+        $('#confirmSaveBtn').on('click', function() {
+            // Get form values
+            const username = $('#username').val();
+            const name = $('#name').val();
+            const email = $('#email').val();
+            const contactNumber = $('#contactNumber').val();
 
-            // Clear the form after saving
-            const form = document.getElementById('addClientForm');
-            form.reset();
-
-            alert('Client saved successfully!');
+            // You can send the form data to the server using AJAX
+            $.ajax({
+                url: 'addClient.php', // Replace with your server endpoint
+                method: 'POST',
+                data: {
+                    username: username,
+                    name: name,
+                    email: email,
+                    contactNumber: contactNumber
+                },
+                success: function(response) {
+                    // Handle response (e.g., success message, redirect, etc.)
+                    toastr.success('Client added successfully!');
+                    $('#addClientForm')[0].reset(); // Reset the form
+                    $('#confirmationModal').modal('hide'); // Close the modal
+                },
+                error: function(xhr, status, error) {
+                    // Handle error (e.g., show error message)
+                    toastr.error('An error occurred while saving the client.');
+                }
+            });
         });
+
+        // Close modal on cancel button click
+        $('.btn-secondary').on('click', function() {
+            $('#confirmationModal').modal('hide');
+        });
+    });
+</script>
+
     </script>
 </body>
 

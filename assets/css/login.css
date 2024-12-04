@@ -7,7 +7,7 @@
 body{
     font-family: 'Poppins', sans-serif;
     overflow: hidden;
-	background: linear-gradient(to bottom, black 10%, white);
+	background-image: url(../img/bg.jpg);
 }
 
 .wave{

@@ -1,3 +1,17 @@
+<?php
+require("../config/db_connection.php");
+
+session_start();
+require("../config/session_timeout.php");
+
+if (!isset($_SESSION['id'])) {
+  header("location: ../config/not_login-error.html");
+} else {
+  if ($_SESSION['role'] != "admin") {
+    header("location: ../config/user_level-error.html");
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
     data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template">
@@ -6,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Receptionist Dashboard</title>
+    <title>Client Activities</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/img/icon.png" />
     <!-- Fonts -->
@@ -101,9 +115,16 @@
                             <div class="text-truncate" data-i18n="Client Activities">Client Activities</div>
                         </a>
                     </li>
+                    <!-- Points Configuration -->
+                    <li class="menu-item">
+                        <a href="points-configuration.php" class="menu-link">
+                            <i class="menu-icon tf-icons fa-solid fa-list-ol"></i>
+                            <div class="text-truncate" data-i18n="Points Configuration">Points Configuration</div>
+                        </a>
+                    </li>
                     <!-- Logout -->
                     <li class="menu-item">
-                        <a href="../logout.php?logout=true" class="menu-link">
+                        <a href="../config/logout.php?logout=true" class="menu-link">
                             <i class='menu-icon tf-icons bx bx-log-out'></i>
                             <div class="text-truncate" data-i18n="Logout">Logout</div>
                         </a>
@@ -144,19 +165,10 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <span
-                                                        class="fw-medium d-block">First Name</span>
-                                                    <small class="text-muted">Receptionist</small>
+                                                        class="fw-medium d-block"><?php echo $_SESSION['username'];?></span>
+                                                    <small class="text-muted">Admin</small>
                                                 </div>
                                             </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" style="cursor: pointer;">
-                                            <i class="bx bx-user me-2"></i>
-                                            <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
                             </li>
@@ -202,7 +214,6 @@
                                 <thead>
                                     <tr>
                                         <th><strong>Client ID</strong></th>
-                                        <th><strong>Username</strong></th>
                                         <th><strong>Name</strong></th>
                                         <th><strong>Email</strong></th>
                                         <th><strong>Contact Number</strong></th>
@@ -213,62 +224,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>NXS-2025-000001</td>
-                                        <td>johndoe</td>
-                                        <td>John Doe</td>
-                                        <td>johndoe@example.com</td>
-                                        <td>09123456789</td>
-                                        <td>Basic Massage</td>
-                                        <td>150</td>
-                                        <td>Sarah Lee</td>
-                                        <td>December 3, 2024 3:00 PM</td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000002</td>
-                                        <td>janesmith</td>
-                                        <td>Jane Smith</td>
-                                        <td>janesmith@example.com</td>
-                                        <td>09198765432</td>
-                                        <td>Basic Massage</td>
-                                        <td>200</td>
-                                        <td>Mark Johnson</td>
-                                        <td>December 2, 2024 3:00 PM</td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000003</td>
-                                        <td>michaelbrown</td>
-                                        <td>Michael Brown</td>
-                                        <td>michaelbrown@example.com</td>
-                                        <td>09187654321</td>
-                                        <td>Basic Massage</td>
-                                        <td>180</td>
-                                        <td>Emma Davis</td>
-                                        <td>December 1, 2024 3:00 PM</td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000004</td>
-                                        <td>emilywhite</td>
-                                        <td>Emily White</td>
-                                        <td>emilywhite@example.com</td>
-                                        <td>09176543210</td>
-                                        <td>Basic Massage</td>
-                                        <td>120</td>
-                                        <td>David Clark</td>
-                                        <td>November 30, 2024 3:00 PM</td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000005</td>
-                                        <td>chrisgreen</td>
-                                        <td>Chris Green</td>
-                                        <td>chrisgreen@example.com</td>
-                                        <td>09165432109</td>
-                                        <td>Basic Massage</td>
-                                        <td>250</td>
-                                        <td>Amy Miller</td>
-                                        <td>November 29, 2024 3:00 PM</td>
-                                    </tr>
-
                                 </tbody>
                             </table>
                         </div>
@@ -387,7 +342,271 @@
             <!-- Main JS -->
             <script src="../assets/js/main.js"></script>
             <!-- Page JS -->
-            <script src="assets/js/client-activity.js"></script>
+            <script>
+                 $(document).ready(function() {
+    // Initialize DataTable
+    var table = $("#clientTable").DataTable({
+        destroy: true,
+        ajax: {
+            url: "fetch_activity.php",
+            type: "GET",
+            dataSrc: function(json) {
+                return json;
+            },
+        },
+        columns: [{
+                data: "client_id"
+            },
+            {
+                data: "name"
+            },
+            {
+                data: "email"
+            },
+            {
+                data: "contact_number"
+            },
+            {
+                data: "service"
+            },
+            {
+                data: "points_acquired"
+            },
+            {
+                data: "receptionist"
+            },
+            {
+                data: "formatted_date"
+            },
+        ],
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        order: [
+            [7, "desc"]
+        ],
+    });
+
+    // Function to parse the date from "Month Day, Year" format to Date object
+    function parseTableDate(dateStr) {
+        // Format is assumed to be "Month Day, Year" (e.g., "December 4, 2024")
+        var parts = dateStr.split(' ');
+        var month = new Date(Date.parse(parts[0] + " 1, 2021")).getMonth(); // Get month index from month name
+        var day = parseInt(parts[1]);
+        var year = parseInt(parts[2]);
+        return new Date(year, month, day); // Create Date object
+    }
+
+    // Set the end date to today's date on page load
+    var today = new Date();
+    var formattedToday = today.toISOString().split('T')[0]; // Formats the date as YYYY-MM-DD
+    $("#searchEndDate").val(formattedToday);
+
+    $("#searchStartDate, #searchEndDate").on("change", function() {
+    var startDate = $("#searchStartDate").val();
+    var endDate = $("#searchEndDate").val();
+
+    // Ensure that both start and end dates are selected
+    if (startDate && endDate) {
+        var startDateObj = new Date(startDate);
+        var endDateObj = new Date(endDate);
+        startDateObj.setHours(0, 0, 0, 0); // Set to the start of the day
+        endDateObj.setHours(23, 59, 59, 999); // Set to the end of the day
+
+        var rowsVisible = false; // Flag to check if any rows match
+
+        // Iterate through each row in the table
+        table.rows().every(function() {
+            var row = this.node();
+            var dateCell = $(row).find("td").eq(7).text(); // Get the "Date & Time" column text
+
+            // Parse the date in the "Date & Time" column
+            var tableDateObj = parseTableDate(dateCell);
+
+            // Check if the date is within the range (inclusive)
+            if (tableDateObj >= startDateObj && tableDateObj <= endDateObj) {
+                $(row).show();
+                rowsVisible = true;
+            } else {
+                $(row).hide();
+            }
+        });
+
+        // If no rows match the filter, show a message without breaking DataTable settings
+        if (!rowsVisible) {
+            $("#clientTable tbody").html(
+                '<tr><td colspan="8" class="text-center">No data available</td></tr>'
+            );
+        }
+    } else {
+        // Show all rows if no date range is specified
+        table.rows().show();
+        table.draw();
+    }
+});
+
+
+    // Handle By Today selection
+    $('#byToday').click(function() {
+        var today = new Date();
+        var day = ("0" + today.getDate()).slice(-2);
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);  // Months are 0-based
+        var year = today.getFullYear();
+        
+        var todayDate = year + "-" + month + "-" + day;  // Format date as YYYY-MM-DD
+
+        // Open the modal or directly trigger the report generation
+        generateReport('today', todayDate);  // Using 'today' for this case
+    });
+
+    function generateReport(reportType, date) {
+        $.ajax({
+            url: 'generate_report.php',  // PHP script to generate the report
+            method: 'GET',
+            data: {
+                report_type: reportType,
+                date: date  // Passing today's date only
+            },
+            success: function(response) {
+                console.log(response);
+                window.location.href = 'generate_report.php?report_type=today&date=' + date;
+                // Handle successful response (e.g., download the file or show success message)
+                toastr.success('Report generated successfully');
+            },
+            error: function(xhr, status, error) {
+                toastr.error('Error generating report: ' + error);
+            }
+        });
+    }
+    // Initialize the Year Options
+    function populateYearOptions() {
+        var currentYear = new Date().getFullYear();
+        var yearSelect = $("#yearInput");
+        for (var i = 2000; i <= currentYear; i++) {
+            yearSelect.append('<option value="' + i + '">' + i + '</option>');
+        }
+    }
+
+    populateYearOptions(); // Call function to populate year options
+
+    // Adjust End Date when Start Date is selected for Week Modal
+    $("#weekStartDate").on("change", function () {
+        var startDate = new Date($("#weekStartDate").val());
+        startDate.setDate(startDate.getDate() + 6); // Add 6 days to start date for end date
+        var endDate = startDate.toISOString().split("T")[0]; // Format as yyyy-mm-dd
+        $("#weekEndDate").val(endDate); // Set end date
+    });
+
+    // Generate Week Report
+    $("#generateWeekReport").on("click", function () {
+        var startDate = $("#weekStartDate").val();
+        var endDate = $("#weekEndDate").val();
+
+        if (startDate && endDate) {
+            $.ajax({
+                url: "generate_report.php",
+                type: "GET",
+                data: {
+                    report_type: 'week',
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                success: function (response) {
+                    window.location.href = 'generate_report.php?report_type=week&start_date=' + startDate + '&end_date=' + endDate;
+                    // Handle response, such as showing a success message or displaying the report
+                    toastr.success("Week Report Generated Successfully");
+                },
+                error: function () {
+                    toastr.error("Error generating report.");
+                }
+            });
+        } else {
+            toastr.warning("Please select both start and end dates.");
+        }
+    });
+
+    // Generate Monthly Report
+    $("#generateMonthReport").on("click", function () {
+        var monthYear = $("#monthInput").val();
+
+        if (monthYear) {
+            $.ajax({
+                url: "generate_report.php",
+                type: "GET",
+                data: {
+                    report_type: 'month',
+                    month_year: monthYear
+                },
+                success: function (response) {
+                    window.location.href = 'generate_report.php?report_type=month&month_year=' + monthYear;
+                    // Handle response, such as showing a success message or displaying the report
+                    toastr.success("Month Report Generated Successfully");
+                },
+                error: function () {
+                    toastr.error("Error generating report.");
+                }
+            });
+        } else {
+            toastr.warning("Please select a month.");
+        }
+    });
+
+    // Generate Date Range Report
+    $("#generateDateRangeReport").on("click", function () {
+        var startDate = $("#dateStart").val();
+        var endDate = $("#dateEnd").val();
+
+        if (startDate && endDate) {
+            $.ajax({
+                url: "generate_report.php",
+                type: "GET",
+                data: {
+                    report_type: 'date_range',
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                success: function (response) {
+                    window.location.href = 'generate_report.php?report_type=date_range&start_date=' + startDate + '&end_date=' + endDate;
+                    // Handle response, such as showing a success message or displaying the report
+                    toastr.success("Date Range Report Generated Successfully");
+                },
+                error: function () {
+                    toastr.error("Error generating report.");
+                }
+            });
+        } else {
+            toastr.warning("Please select both start and end dates.");
+        }
+    });
+
+    // Generate Yearly Report
+    $("#generateYearReport").on("click", function () {
+        var year = $("#yearInput").val();
+
+        if (year) {
+            $.ajax({
+                url: "generate_report.php",
+                type: "GET",
+                data: {
+                    report_type: 'year',
+                    year: year
+                },
+                success: function (response) {
+                    window.location.href = 'generate_report.php?report_type=year&year=' + year;
+                    // Handle response, such as showing a success message or displaying the report
+                    toastr.success("Year Report Generated Successfully");
+                },
+                error: function () {
+                    toastr.error("Error generating report.");
+                }
+            });
+        } else {
+            toastr.warning("Please select a year.");
+        }
+    });
+});
+            </script>
 </body>
 
 </html>

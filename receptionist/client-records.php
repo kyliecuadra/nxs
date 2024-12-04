@@ -1,3 +1,17 @@
+<?php
+require("../config/db_connection.php");
+
+session_start();
+require("../config/session_timeout.php");
+
+if (!isset($_SESSION['id'])) {
+    header("location: ../config/not_login-error.html");
+} else {
+    if ($_SESSION['role'] != "receptionist") {
+        header("location: ../config/user_level-error.html");
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
     data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template">
@@ -6,7 +20,7 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Receptionist Dashboard</title>
+    <title>Client Records</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/img/icon.png" />
     <!-- Fonts -->
@@ -95,7 +109,7 @@
                     </li>
                     <!-- Logout -->
                     <li class="menu-item">
-                        <a href="../logout.php?logout=true" class="menu-link">
+                        <a href="../config/logout.php?logout=true" class="menu-link">
                             <i class='menu-icon tf-icons bx bx-log-out'></i>
                             <div class="text-truncate" data-i18n="Logout">Logout</div>
                         </a>
@@ -136,19 +150,10 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <span
-                                                        class="fw-medium d-block">First Name</span>
+                                                        class="fw-medium d-block"><?php echo $_SESSION['username']; ?></span>
                                                     <small class="text-muted">Receptionist</small>
                                                 </div>
                                             </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" style="cursor: pointer;">
-                                            <i class="bx bx-user me-2"></i>
-                                            <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
                             </li>
@@ -169,7 +174,6 @@
                                 <a href="add-client.php" class="btn w-auto" target="_blank">
                                     Add Client
                                 </a>
-
                             </div>
                             <table id="clientTable" class="mr-2 table table-hover table-bordered table-responsive display">
                                 <thead>
@@ -184,52 +188,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>NXS-2025-000001</td>
-                                        <td>john_doe</td>
-                                        <td>John Doe</td>
-                                        <td>johndoe@example.com</td>
-                                        <td>09123456789</td>
-                                        <td>150</td>
-                                        <td><button class="btn" data-bs-toggle="modal" data-bs-target="#clientInfoModal">View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000002</td>
-                                        <td>jane_smith</td>
-                                        <td>Jane Smith</td>
-                                        <td>janesmith@example.com</td>
-                                        <td>09198765432</td>
-                                        <td>200</td>
-                                        <td><button class="btn">View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000003</td>
-                                        <td>michael_brown</td>
-                                        <td>Michael Brown</td>
-                                        <td>michaelbrown@example.com</td>
-                                        <td>09187654321</td>
-                                        <td>120</td>
-                                        <td><button class="btn">View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000004</td>
-                                        <td>emily_white</td>
-                                        <td>Emily White</td>
-                                        <td>emilywhite@example.com</td>
-                                        <td>09176543210</td>
-                                        <td>180</td>
-                                        <td><button class="btn">View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NXS-2025-000005</td>
-                                        <td>chris_green</td>
-                                        <td>Chris Green</td>
-                                        <td>chrisgreen@example.com</td>
-                                        <td>09165432109</td>
-                                        <td>250</td>
-                                        <td><button class="btn">View</button></td>
-                                    </tr>
-
 
                                 </tbody>
                             </table>
@@ -258,44 +216,41 @@
                                     <form>
                                         <div class="mb-3">
                                             <label for="clientId" class="form-label">Account Number</label>
-                                            <input type="text" class="form-control" id="clientId" value="NXS-2025-000001" disabled>
+                                            <input type="text" class="form-control" id="clientId" disabled>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">
-                                                Username
-                                            </label>
-                                            <input type="text" class="form-control" id="username" value="john_doe" disabled>
+                                            <label for="username" class="form-label">Username</label>
+                                            <input type="text" class="form-control" id="username" disabled>
                                         </div>
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="name" value="John Doe" required>
+                                            <input type="text" class="form-control" id="clientName" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">
-                                                Email
-                                            </label>
-                                            <input type="email" class="form-control" id="email" value="johndoe@example.com" disabled>
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" disabled>
                                         </div>
                                         <div class="mb-3">
                                             <label for="contactNumber" class="form-label">Contact Number <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="contactNumber" value="09123456789" required>
+                                            <input type="text" class="form-control" id="clientContactNumber" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="remainingPoints" class="form-label">Remaining Points</label>
-                                            <input type="text" class="form-control" id="remainingPoints" value="150" disabled>
+                                            <input type="text" class="form-control" id="remainingPoints" disabled>
                                         </div>
                                     </form>
                                 </div>
 
-                                <!-- Right side: QR Code and Download Button -->
-                                <div class="col-md-6 text-center d-flex align-items-center justify-content-center">
-                                    <img src="../assets/img/qr/qr.png" alt="QR Code" id="qrCodeImage" class="img-fluid mb-3">
+                                <!-- Right side: QR Code -->
+                                <div class="col-md-6 text-center d-flex flex-column align-items-center justify-content-center">
+                                    <img src="" alt="QR Code" id="qrCodeImage" class="img-fluid mb-3">
+                                    <button type="button" class="btn btn-primary" id="downloadQRBtn">Download QR Code</button>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="submit" class="btn btn-primary" id="saveClientInfo">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -319,44 +274,127 @@
             <!-- Page JS -->
             <script>
                 $(document).ready(function() {
-                    var today = new Date();
+                    setInterval(function() {
+                        $('#clientTable').DataTable().ajax.reload(null, false); // 'null, false' to prevent table state reset
+                    }, 1000); // 1000 ms = 1 second
 
-                    // Get the date components
-                    var day = today.getDate().toString().padStart(2, '0'); // Ensure two-digit day
-                    var month = (today.getMonth() + 1).toString().padStart(2, '0'); // Ensure two-digit month
-                    var year = today.getFullYear();
-
-                    // Format the date as "December 2, 2024" (for display)
-                    var formattedDate = today.toLocaleString('default', {
-                        month: 'long'
-                    }) + ' ' + day + ', ' + year;
-
-                    // Format date for filename as "12_02_2024" (with underscores)
-                    var noDashesDate = month + '_' + day + '_' + year;
-
-                    $('#clientTable').DataTable({
-                        dom: 'Bfrtip',
-                        buttons: [{
-                            extend: 'excelHtml5',
-                            title: 'Clients Record',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5]
-                            },
-                            filename: function() {
-                                // Generate filename using the formatted date with underscores
-                                return "Clients Record"; // Returns the formatted filename with underscores
-                            },
-                            customize: function(xlsx) {
-                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                                // Optionally, add any sheet customization here
+                    // Initialize the DataTable
+                    var table = $('#clientTable').DataTable({
+                        "ajax": {
+                            "url": "fetch_clients.php", // Fetch client data from the PHP file
+                            "type": "GET",
+                            "dataSrc": function(json) {
+                                return json; // Return the data for DataTables
                             }
-                        }],
+                        },
+                        "columns": [{
+                                "data": "client_id"
+                            },
+                            {
+                                "data": "username"
+                            },
+                            {
+                                "data": "name"
+                            },
+                            {
+                                "data": "email"
+                            },
+                            {
+                                "data": "contact_number"
+                            },
+                            {
+                                "data": "remaining_points"
+                            },
+                            {
+                                "data": null,
+                                "defaultContent": '<button class="btn btn-info view-btn">View</button>'
+                            }
+                        ],
                         paging: true,
                         searching: true,
                         ordering: true,
                         responsive: true
-
                     });
+
+                    // Event handler for "View" button
+                    $('#clientTable').on('click', '.view-btn', function() {
+                        var rowData = table.row($(this).parents('tr')).data(); // Get row data
+
+                        // Populate modal with client data
+                        $('#clientId').val(rowData.client_id);
+                        $('#username').val(rowData.username);
+                        $('#clientName').val(rowData.name);
+                        $('#email').val(rowData.email);
+                        $('#clientContactNumber').val(rowData.contact_number);
+                        $('#remainingPoints').val(rowData.remaining_points);
+                        $('#qrCodeImage').attr('src', rowData.qr_code_path); // Assuming qr_code_path is the path to the QR code image
+
+                        // Show the modal
+                        $('#clientInfoModal').modal('show');
+                    });
+                });
+
+                // When the "Download QR Code" button is clicked
+                $('#downloadQRBtn').click(function() {
+                    // Get the client ID (Account Number) from the input field
+                    var clientId = $('#clientId').val(); // The clientId input field holds the account number
+
+                    // Get the image source URL
+                    var qrCodeImageSrc = $('#qrCodeImage').attr('src');
+
+                    // Create a temporary anchor tag to simulate a download
+                    var downloadLink = document.createElement('a');
+                    downloadLink.href = qrCodeImageSrc;
+                    downloadLink.download = clientId + '.png'; // Set the filename to be the client ID with a .png extension
+
+                    // Trigger the download by clicking the anchor tag programmatically
+                    downloadLink.click();
+                });
+
+
+                $('#saveClientInfo').on('click', function(e) {
+                    e.preventDefault(); // Prevent form submission
+
+                    var clientId = $('#clientId').val();
+                    var name = $('#clientName').val();
+                    var contactNumber = $('#clientContactNumber').val().trim(); // Ensure no extra spaces
+
+                    // Validation for Name and Contact Number
+                    if (name === "") {
+                        toastr.warning("Name is required.");
+                        return;
+                    }
+                    var phonePattern = /^09\d{9}$/;
+                    if (!phonePattern.test(contactNumber)) {
+                        toastr.warning("Contact number must start with 09 and be 11 digits long.");
+                        return;
+                    }
+
+
+                    // Send data to PHP script for updating
+                    $.ajax({
+                        url: 'update_client.php', // The PHP file that will handle the update
+                        type: 'POST',
+                        data: {
+                            client_id: clientId,
+                            name: name,
+                            contact_number: contactNumber
+                        },
+                        dataType: 'json', // Ensure response is expected as JSON
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success('Client information updated successfully!');
+                                $('#clientInfoModal').modal('hide');
+                                $('#clientTable').DataTable().ajax.reload(); // Reload the DataTable to reflect changes
+                            } else {
+                                toastr.error('Error updating client information: ' + (response.message || 'Unknown error.'));
+                            }
+                        },
+                        error: function() {
+                            toastr.error('An error occurred while updating the client.');
+                        }
+                    });
+
                 });
             </script>
 </body>

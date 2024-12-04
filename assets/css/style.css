@@ -50,7 +50,6 @@ main::after {
 main .formBox {
   width: 500px;
   height: 500px;
-  background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   position: relative; /* Ensure this is positioned above the overlay */
@@ -69,17 +68,21 @@ main img {
   height: 175px;
 }
 
+main .formBox label,
+main .formBox span {
+    color: #fff;
+}
 .btn {
   width: 100%;
-  background-color: #006400 !important;
+  background-color: #B59410 !important;
   color: #fff !important;
-  border-color: #006400 !important;
+  border-color: #B59410 !important;
 }
 
 .btn:hover {
-  background-color: #008600 !important;
+  background-color: #FFD700 !important;
   color: #fff !important;
-  border-color: #008600 !important;
+  border-color: #FFD700 !important;
 }
 
 /* Chrome, Safari, Edge, Opera */
