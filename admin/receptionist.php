@@ -68,7 +68,7 @@ if (!isset($_SESSION['id'])) {
             <!-- Menu -->
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo ">
-                    <a href="dashboard.html" class="app-brand-link">
+                    <a href="dashboard.php" class="app-brand-link">
                     <span class="app-brand-logo demo">
                     <img src="../assets/img/icon.png" alt="" width="50">
                     </span>
