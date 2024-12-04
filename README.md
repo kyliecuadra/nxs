@@ -44,19 +44,19 @@ The **NXS Spa Web-Based Pointing/Management System** is a web-based management t
    ```
 2. **Install XAMPP (if not already installed):**:
 
-  -Download and install XAMPP from XAMPP official website.
-  -Start Apache and MySQL services.
+  - Download and install XAMPP from XAMPP official website.
+  - Start Apache and MySQL services.
 3. **Set up the Database:**
 
-  -Create a database named nxs.
-  -Import the provided nxs.sql file to set up the tables:
+  - Create a database named nxs.
+  - Import the provided nxs.sql file to set up the tables:
   ```bash
-   git clone [<repository_url>](https://github.com/kyliecuadra/nxs)
+   mysql -u root -p nxs < nxs.sql
   ```
 4. **Configure the Web Server:**
 
-  -Place the project files in the htdocs directory of your XAMPP installation (e.g., C:\xampp\htdocs\spa_system).
-  -Ensure proper file permissions for read and write access.
+  - Place the project files in the htdocs directory of your XAMPP installation (e.g., C:\xampp\htdocs\spa_system).
+  - Ensure proper file permissions for read and write access.
 5. **Access the System:**
 
   -Open a web browser and navigate to http://localhost/spa_system to start using the system.
@@ -64,20 +64,20 @@ The **NXS Spa Web-Based Pointing/Management System** is a web-based management t
 ## **Usage**
 1. **Receptionist Registration:**
 
-  -Admin users can register receptionists who are responsible for managing client points.
+  - Admin users can register receptionists who are responsible for managing client points.
 
 2. **Client Check-In:**
 
-  -Once a client is registered, an encrypted QR code is generated.
-  -The QR code can be downloaded, sent via email, or the client can take a picture for easy future access.
+  - Once a client is registered, an encrypted QR code is generated.
+  - The QR code can be downloaded, sent via email, or the client can take a picture for easy future access.
   
 3. **Point Management:**
 
-  -Receptionists can add and redeem points based on client activities and services availed.
+  - Receptionists can add and redeem points based on client activities and services availed.
   
 4. **Reports:**
 
-  -Admins and Receptionist can generate reports to analyze points, services, and other client interactions.
+  - Admins and Receptionist can generate reports to analyze points, services, and other client interactions.
 
 ## **Contributing**
 If you'd like to contribute to this project, feel free to fork the repository and submit a pull request with your improvements. Please make sure your code follows the existing structure and includes tests where applicable.
