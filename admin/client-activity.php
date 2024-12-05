@@ -401,6 +401,8 @@ if (!isset($_SESSION['id'])) {
     // Set the end date to today's date on page load
     var today = new Date();
     var formattedToday = today.toISOString().split('T')[0]; // Formats the date as YYYY-MM-DD
+    // Set the max attribute to prevent selecting future dates
+    $("#searchStartDate, #searchEndDate").attr("max", formattedToday);
     $("#searchEndDate").val(formattedToday);
 
     $("#searchStartDate, #searchEndDate").on("change", function() {
