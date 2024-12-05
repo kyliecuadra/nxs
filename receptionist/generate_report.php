@@ -63,6 +63,7 @@ if (isset($_GET['report_type'])) {
     }
 
     try {
+        echo $query;
         // Execute the query and generate the Excel report
         $result = mysqli_query($conn, $query);
 

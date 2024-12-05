@@ -2,7 +2,7 @@
 require("config/db_connection.php");
 session_start();
 
-if (isset($_SESSION['email']) && isset($_SESSION['status'])) { 
+if (isset($_SESSION['id'])) { 
     if ($_SESSION['role'] == "admin") {
         header("location: admin/dashboard.php");
         exit;
@@ -18,7 +18,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['status'])) {
 	<title>Login</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/login.css">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="assets/css/fontawesome.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="icon" href="assets/img/icon.png">
 	<link rel="stylesheet" type="text/css" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/toastr.css">
@@ -56,7 +56,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['status'])) {
            		    	<input type="password" class="input" id="password" required>
             	   </div>
             	</div>
-            	<input type="submit" class="btn" value="Login">
+            	<input type="submit" class="btn text-white" value="Login">
             </form>
         </div>
     </div>

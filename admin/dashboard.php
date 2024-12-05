@@ -46,18 +46,18 @@ if (!isset($_SESSION['id'])) {
     <!-- Include DataTables CSS and JS -->
     <link rel="stylesheet" type="text/css" href="../assets/css/datatable.min.css">
     <script src="../assets/js/datatable.min.js"></script>
-    <!-- DataTables Buttons CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.0/css/buttons.dataTables.min.css">
+   <!-- DataTables Buttons CSS -->
+   <link rel="stylesheet" type="text/css" href="../assets/css/buttons.dataTables.min.css">
     <!-- DataTables Buttons JS (for Excel, PDF, etc.) -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.0/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="../assets/js/dataTables.buttons.min.js"></script>
 
     <!-- JSZip (required for Excel export) -->
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="../assets/js/jszip.min.js"></script>
 
     <!-- Excel export (from DataTables Buttons) -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.0/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="../assets/js/buttons.html5.min.js"></script>
     <!-- Script for QR Code Scanner -->
-    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
+    <script src="../assets/js/jsQR.min.js"></script>
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
