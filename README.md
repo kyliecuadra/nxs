@@ -55,7 +55,7 @@ The **NXS Spa Web-Based Pointing/Management System** is a web-based management t
     ```
 4. **Configure the Web Server:**
 
-  - Place the project files in the htdocs directory of your XAMPP installation (e.g., C:\xampp\htdocs\spa_system).
+  - Place the project files in the htdocs directory of your XAMPP installation (e.g., C:\xampp\htdocs\nxs).
   - Ensure proper file permissions for read and write access.
 5. **Access the System:**
 
