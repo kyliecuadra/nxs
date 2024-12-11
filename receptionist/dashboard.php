@@ -480,7 +480,16 @@ if (!isset($_SESSION['id'])) {
                         responsive: true, // Make the table responsive
                         "order": [
                             [7, 'asc']
-                        ]
+                        ],
+                        "createdRow": function(row, data, dataIndex) {
+                            if (parseFloat(data.points_acquired) < 0) {
+                                // Apply style to each cell in the row
+                                $(row).find('td').each(function() {
+                                    $(this).css('color', 'red'); // Add red font color
+                                });
+                            }
+                        }
+
                     });
 
                     // Show the Add Points modal

@@ -5,11 +5,11 @@ session_start();
 require("../config/session_timeout.php");
 
 if (!isset($_SESSION['id'])) {
-  header("location: ../config/not_login-error.html");
+    header("location: ../config/not_login-error.html");
 } else {
-  if ($_SESSION['role'] != "receptionist") {
-    header("location: ../config/user_level-error.html");
-  }
+    if ($_SESSION['role'] != "receptionist") {
+        header("location: ../config/user_level-error.html");
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -151,7 +151,7 @@ if (!isset($_SESSION['id'])) {
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <span
-                                                        class="fw-medium d-block"><?php echo $_SESSION['username'];?></span>
+                                                        class="fw-medium d-block"><?php echo $_SESSION['username']; ?></span>
                                                     <small class="text-muted">Receptionist</small>
                                                 </div>
                                             </div>
@@ -330,271 +330,278 @@ if (!isset($_SESSION['id'])) {
             <!-- Page JS -->
             <script>
                 $(document).ready(function() {
-    // Initialize DataTable
-    var table = $("#clientTable").DataTable({
-        destroy: true,
-        ajax: {
-            url: "fetch_activity.php",
-            type: "GET",
-            dataSrc: function(json) {
-                return json;
-            },
-        },
-        columns: [{
-                data: "client_id"
-            },
-            {
-                data: "name"
-            },
-            {
-                data: "email"
-            },
-            {
-                data: "contact_number"
-            },
-            {
-                data: "service"
-            },
-            {
-                data: "points_acquired"
-            },
-            {
-                data: "receptionist"
-            },
-            {
-                data: "formatted_date"
-            },
-        ],
-        paging: true,
-        searching: true,
-        ordering: true,
-        responsive: true,
-        order: [
-            [7, "desc"]
-        ],
-    });
+                    // Initialize DataTable
+                    var table = $("#clientTable").DataTable({
+                        destroy: true,
+                        ajax: {
+                            url: "fetch_activity.php",
+                            type: "GET",
+                            dataSrc: function(json) {
+                                return json;
+                            },
+                        },
+                        columns: [{
+                                data: "client_id"
+                            },
+                            {
+                                data: "name"
+                            },
+                            {
+                                data: "email"
+                            },
+                            {
+                                data: "contact_number"
+                            },
+                            {
+                                data: "service"
+                            },
+                            {
+                                data: "points_acquired"
+                            },
+                            {
+                                data: "receptionist"
+                            },
+                            {
+                                data: "formatted_date"
+                            },
+                        ],
+                        paging: true,
+                        searching: true,
+                        ordering: true,
+                        responsive: true,
+                        order: [
+                            [7, "desc"]
+                        ],
+                        "createdRow": function(row, data, dataIndex) {
+                            if (parseFloat(data.points_acquired) < 0) {
+                                // Apply style to each cell in the row
+                                $(row).find('td').each(function() {
+                                    $(this).css('color', 'red'); // Add red font color
+                                });
+                            }
+                        }
+                    });
 
-    // Function to parse the date from "Month Day, Year" format to Date object
-    function parseTableDate(dateStr) {
-        // Format is assumed to be "Month Day, Year" (e.g., "December 4, 2024")
-        var parts = dateStr.split(' ');
-        var month = new Date(Date.parse(parts[0] + " 1, 2021")).getMonth(); // Get month index from month name
-        var day = parseInt(parts[1]);
-        var year = parseInt(parts[2]);
-        return new Date(year, month, day); // Create Date object
-    }
+                    // Function to parse the date from "Month Day, Year" format to Date object
+                    function parseTableDate(dateStr) {
+                        // Format is assumed to be "Month Day, Year" (e.g., "December 4, 2024")
+                        var parts = dateStr.split(' ');
+                        var month = new Date(Date.parse(parts[0] + " 1, 2021")).getMonth(); // Get month index from month name
+                        var day = parseInt(parts[1]);
+                        var year = parseInt(parts[2]);
+                        return new Date(year, month, day); // Create Date object
+                    }
 
-    // Set the end date to today's date on page load
-    var today = new Date();
-    var formattedToday = today.toISOString().split('T')[0]; // Formats the date as YYYY-MM-DD
-    // Set the max attribute to prevent selecting future dates
-    $("#searchStartDate, #searchEndDate").attr("max", formattedToday);
-    $("#searchEndDate").val(formattedToday);
+                    // Set the end date to today's date on page load
+                    var today = new Date();
+                    var formattedToday = today.toISOString().split('T')[0]; // Formats the date as YYYY-MM-DD
+                    // Set the max attribute to prevent selecting future dates
+                    $("#searchStartDate, #searchEndDate").attr("max", formattedToday);
+                    $("#searchEndDate").val(formattedToday);
 
-    $("#searchStartDate, #searchEndDate").on("change", function() {
-    var startDate = $("#searchStartDate").val();
-    var endDate = $("#searchEndDate").val();
+                    $("#searchStartDate, #searchEndDate").on("change", function() {
+                        var startDate = $("#searchStartDate").val();
+                        var endDate = $("#searchEndDate").val();
 
-    // Ensure that both start and end dates are selected
-    if (startDate && endDate) {
-        var startDateObj = new Date(startDate);
-        var endDateObj = new Date(endDate);
-        startDateObj.setHours(0, 0, 0, 0); // Set to the start of the day
-        endDateObj.setHours(23, 59, 59, 999); // Set to the end of the day
+                        // Ensure that both start and end dates are selected
+                        if (startDate && endDate) {
+                            var startDateObj = new Date(startDate);
+                            var endDateObj = new Date(endDate);
+                            startDateObj.setHours(0, 0, 0, 0); // Set to the start of the day
+                            endDateObj.setHours(23, 59, 59, 999); // Set to the end of the day
 
-        var rowsVisible = false; // Flag to check if any rows match
+                            var rowsVisible = false; // Flag to check if any rows match
 
-        // Iterate through each row in the table
-        table.rows().every(function() {
-            var row = this.node();
-            var dateCell = $(row).find("td").eq(7).text(); // Get the "Date & Time" column text
+                            // Iterate through each row in the table
+                            table.rows().every(function() {
+                                var row = this.node();
+                                var dateCell = $(row).find("td").eq(7).text(); // Get the "Date & Time" column text
 
-            // Parse the date in the "Date & Time" column
-            var tableDateObj = parseTableDate(dateCell);
+                                // Parse the date in the "Date & Time" column
+                                var tableDateObj = parseTableDate(dateCell);
 
-            // Check if the date is within the range (inclusive)
-            if (tableDateObj >= startDateObj && tableDateObj <= endDateObj) {
-                $(row).show();
-                rowsVisible = true;
-            } else {
-                $(row).hide();
-            }
-        });
+                                // Check if the date is within the range (inclusive)
+                                if (tableDateObj >= startDateObj && tableDateObj <= endDateObj) {
+                                    $(row).show();
+                                    rowsVisible = true;
+                                } else {
+                                    $(row).hide();
+                                }
+                            });
 
-        // If no rows match the filter, show a message without breaking DataTable settings
-        if (!rowsVisible) {
-            $("#clientTable tbody").html(
-                '<tr><td colspan="8" class="text-center">No data available</td></tr>'
-            );
-        }
-    } else {
-        // Show all rows if no date range is specified
-        table.rows().show();
-        table.draw();
-    }
-});
+                            // If no rows match the filter, show a message without breaking DataTable settings
+                            if (!rowsVisible) {
+                                $("#clientTable tbody").html(
+                                    '<tr><td colspan="8" class="text-center">No data available</td></tr>'
+                                );
+                            }
+                        } else {
+                            // Show all rows if no date range is specified
+                            table.rows().show();
+                            table.draw();
+                        }
+                    });
 
 
-    // Handle By Today selection
-    $('#byToday').click(function() {
-        var today = new Date();
-        var day = ("0" + today.getDate()).slice(-2);
-        var month = ("0" + (today.getMonth() + 1)).slice(-2);  // Months are 0-based
-        var year = today.getFullYear();
-        
-        var todayDate = year + "-" + month + "-" + day;  // Format date as YYYY-MM-DD
+                    // Handle By Today selection
+                    $('#byToday').click(function() {
+                        var today = new Date();
+                        var day = ("0" + today.getDate()).slice(-2);
+                        var month = ("0" + (today.getMonth() + 1)).slice(-2); // Months are 0-based
+                        var year = today.getFullYear();
 
-        // Open the modal or directly trigger the report generation
-        generateReport('today', todayDate);  // Using 'today' for this case
-    });
+                        var todayDate = year + "-" + month + "-" + day; // Format date as YYYY-MM-DD
 
-    function generateReport(reportType, date) {
-        $.ajax({
-            url: 'generate_report.php',  // PHP script to generate the report
-            method: 'GET',
-            data: {
-                report_type: reportType,
-                date: date  // Passing today's date only
-            },
-            success: function(response) {
-                console.log(response);
-                window.location.href = 'generate_report.php?report_type=today&date=' + date;
-                // Handle successful response (e.g., download the file or show success message)
-                toastr.success('Report generated successfully');
-            },
-            error: function(xhr, status, error) {
-                toastr.error('Error generating report: ' + error);
-            }
-        });
-    }
-    // Initialize the Year Options
-    function populateYearOptions() {
-        var currentYear = new Date().getFullYear();
-        var yearSelect = $("#yearInput");
-        for (var i = 2000; i <= currentYear; i++) {
-            yearSelect.append('<option value="' + i + '">' + i + '</option>');
-        }
-    }
+                        // Open the modal or directly trigger the report generation
+                        generateReport('today', todayDate); // Using 'today' for this case
+                    });
 
-    populateYearOptions(); // Call function to populate year options
+                    function generateReport(reportType, date) {
+                        $.ajax({
+                            url: 'generate_report.php', // PHP script to generate the report
+                            method: 'GET',
+                            data: {
+                                report_type: reportType,
+                                date: date // Passing today's date only
+                            },
+                            success: function(response) {
+                                console.log(response);
+                                window.location.href = 'generate_report.php?report_type=today&date=' + date;
+                                // Handle successful response (e.g., download the file or show success message)
+                                toastr.success('Report generated successfully');
+                            },
+                            error: function(xhr, status, error) {
+                                toastr.error('Error generating report: ' + error);
+                            }
+                        });
+                    }
+                    // Initialize the Year Options
+                    function populateYearOptions() {
+                        var currentYear = new Date().getFullYear();
+                        var yearSelect = $("#yearInput");
+                        for (var i = 2000; i <= currentYear; i++) {
+                            yearSelect.append('<option value="' + i + '">' + i + '</option>');
+                        }
+                    }
 
-    // Adjust End Date when Start Date is selected for Week Modal
-    $("#weekStartDate").on("change", function () {
-        var startDate = new Date($("#weekStartDate").val());
-        startDate.setDate(startDate.getDate() + 6); // Add 6 days to start date for end date
-        var endDate = startDate.toISOString().split("T")[0]; // Format as yyyy-mm-dd
-        $("#weekEndDate").val(endDate); // Set end date
-    });
+                    populateYearOptions(); // Call function to populate year options
 
-    // Generate Week Report
-    $("#generateWeekReport").on("click", function () {
-        var startDate = $("#weekStartDate").val();
-        var endDate = $("#weekEndDate").val();
+                    // Adjust End Date when Start Date is selected for Week Modal
+                    $("#weekStartDate").on("change", function() {
+                        var startDate = new Date($("#weekStartDate").val());
+                        startDate.setDate(startDate.getDate() + 6); // Add 6 days to start date for end date
+                        var endDate = startDate.toISOString().split("T")[0]; // Format as yyyy-mm-dd
+                        $("#weekEndDate").val(endDate); // Set end date
+                    });
 
-        if (startDate && endDate) {
-            $.ajax({
-                url: "generate_report.php",
-                type: "GET",
-                data: {
-                    report_type: 'week',
-                    start_date: startDate,
-                    end_date: endDate
-                },
-                success: function (response) {
-                    window.location.href = 'generate_report.php?report_type=week&start_date=' + startDate + '&end_date=' + endDate;
-                    // Handle response, such as showing a success message or displaying the report
-                    toastr.success("Week Report Generated Successfully");
-                },
-                error: function () {
-                    toastr.error("Error generating report.");
-                }
-            });
-        } else {
-            toastr.warning("Please select both start and end dates.");
-        }
-    });
+                    // Generate Week Report
+                    $("#generateWeekReport").on("click", function() {
+                        var startDate = $("#weekStartDate").val();
+                        var endDate = $("#weekEndDate").val();
 
-    // Generate Monthly Report
-    $("#generateMonthReport").on("click", function () {
-        var monthYear = $("#monthInput").val();
+                        if (startDate && endDate) {
+                            $.ajax({
+                                url: "generate_report.php",
+                                type: "GET",
+                                data: {
+                                    report_type: 'week',
+                                    start_date: startDate,
+                                    end_date: endDate
+                                },
+                                success: function(response) {
+                                    window.location.href = 'generate_report.php?report_type=week&start_date=' + startDate + '&end_date=' + endDate;
+                                    // Handle response, such as showing a success message or displaying the report
+                                    toastr.success("Week Report Generated Successfully");
+                                },
+                                error: function() {
+                                    toastr.error("Error generating report.");
+                                }
+                            });
+                        } else {
+                            toastr.warning("Please select both start and end dates.");
+                        }
+                    });
 
-        if (monthYear) {
-            $.ajax({
-                url: "generate_report.php",
-                type: "GET",
-                data: {
-                    report_type: 'month',
-                    month_year: monthYear
-                },
-                success: function (response) {
-                    window.location.href = 'generate_report.php?report_type=month&month_year=' + monthYear;
-                    // Handle response, such as showing a success message or displaying the report
-                    toastr.success("Month Report Generated Successfully");
-                },
-                error: function () {
-                    toastr.error("Error generating report.");
-                }
-            });
-        } else {
-            toastr.warning("Please select a month.");
-        }
-    });
+                    // Generate Monthly Report
+                    $("#generateMonthReport").on("click", function() {
+                        var monthYear = $("#monthInput").val();
 
-    // Generate Date Range Report
-    $("#generateDateRangeReport").on("click", function () {
-        var startDate = $("#dateStart").val();
-        var endDate = $("#dateEnd").val();
+                        if (monthYear) {
+                            $.ajax({
+                                url: "generate_report.php",
+                                type: "GET",
+                                data: {
+                                    report_type: 'month',
+                                    month_year: monthYear
+                                },
+                                success: function(response) {
+                                    window.location.href = 'generate_report.php?report_type=month&month_year=' + monthYear;
+                                    // Handle response, such as showing a success message or displaying the report
+                                    toastr.success("Month Report Generated Successfully");
+                                },
+                                error: function() {
+                                    toastr.error("Error generating report.");
+                                }
+                            });
+                        } else {
+                            toastr.warning("Please select a month.");
+                        }
+                    });
 
-        if (startDate && endDate) {
-            $.ajax({
-                url: "generate_report.php",
-                type: "GET",
-                data: {
-                    report_type: 'date_range',
-                    start_date: startDate,
-                    end_date: endDate
-                },
-                success: function (response) {
-                    window.location.href = 'generate_report.php?report_type=date_range&start_date=' + startDate + '&end_date=' + endDate;
-                    // Handle response, such as showing a success message or displaying the report
-                    toastr.success("Date Range Report Generated Successfully");
-                },
-                error: function () {
-                    toastr.error("Error generating report.");
-                }
-            });
-        } else {
-            toastr.warning("Please select both start and end dates.");
-        }
-    });
+                    // Generate Date Range Report
+                    $("#generateDateRangeReport").on("click", function() {
+                        var startDate = $("#dateStart").val();
+                        var endDate = $("#dateEnd").val();
 
-    // Generate Yearly Report
-    $("#generateYearReport").on("click", function () {
-        var year = $("#yearInput").val();
+                        if (startDate && endDate) {
+                            $.ajax({
+                                url: "generate_report.php",
+                                type: "GET",
+                                data: {
+                                    report_type: 'date_range',
+                                    start_date: startDate,
+                                    end_date: endDate
+                                },
+                                success: function(response) {
+                                    window.location.href = 'generate_report.php?report_type=date_range&start_date=' + startDate + '&end_date=' + endDate;
+                                    // Handle response, such as showing a success message or displaying the report
+                                    toastr.success("Date Range Report Generated Successfully");
+                                },
+                                error: function() {
+                                    toastr.error("Error generating report.");
+                                }
+                            });
+                        } else {
+                            toastr.warning("Please select both start and end dates.");
+                        }
+                    });
 
-        if (year) {
-            $.ajax({
-                url: "generate_report.php",
-                type: "GET",
-                data: {
-                    report_type: 'year',
-                    year: year
-                },
-                success: function (response) {
-                    window.location.href = 'generate_report.php?report_type=year&year=' + year;
-                    // Handle response, such as showing a success message or displaying the report
-                    toastr.success("Year Report Generated Successfully");
-                },
-                error: function () {
-                    toastr.error("Error generating report.");
-                }
-            });
-        } else {
-            toastr.warning("Please select a year.");
-        }
-    });
-});
+                    // Generate Yearly Report
+                    $("#generateYearReport").on("click", function() {
+                        var year = $("#yearInput").val();
 
+                        if (year) {
+                            $.ajax({
+                                url: "generate_report.php",
+                                type: "GET",
+                                data: {
+                                    report_type: 'year',
+                                    year: year
+                                },
+                                success: function(response) {
+                                    window.location.href = 'generate_report.php?report_type=year&year=' + year;
+                                    // Handle response, such as showing a success message or displaying the report
+                                    toastr.success("Year Report Generated Successfully");
+                                },
+                                error: function() {
+                                    toastr.error("Error generating report.");
+                                }
+                            });
+                        } else {
+                            toastr.warning("Please select a year.");
+                        }
+                    });
+                });
             </script>
 </body>
 

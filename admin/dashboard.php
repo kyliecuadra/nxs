@@ -46,8 +46,8 @@ if (!isset($_SESSION['id'])) {
     <!-- Include DataTables CSS and JS -->
     <link rel="stylesheet" type="text/css" href="../assets/css/datatable.min.css">
     <script src="../assets/js/datatable.min.js"></script>
-   <!-- DataTables Buttons CSS -->
-   <link rel="stylesheet" type="text/css" href="../assets/css/buttons.dataTables.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" type="text/css" href="../assets/css/buttons.dataTables.min.css">
     <!-- DataTables Buttons JS (for Excel, PDF, etc.) -->
     <script type="text/javascript" charset="utf8" src="../assets/js/dataTables.buttons.min.js"></script>
 
@@ -236,7 +236,7 @@ if (!isset($_SESSION['id'])) {
                             </table>
                         </div>
                     </div>
-<!-- QR SCANNER MODAL START -->
+                    <!-- QR SCANNER MODAL START -->
                     <!-- Modal Structure -->
                     <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -463,16 +463,16 @@ if (!isset($_SESSION['id'])) {
                             },
                             {
                                 "data": "service"
-                            }, // Assuming "service" is part of the data
+                            },
                             {
                                 "data": "points_acquired"
-                            }, // Assuming "points_acquired" is part of the data
+                            },
                             {
                                 "data": "receptionist"
-                            }, // Assuming "receptionist" is part of the data
+                            },
                             {
                                 "data": "time"
-                            } // Assuming "time" is part of the data
+                            }
                         ],
                         dom: 'Bfrtip', // This enables the buttons toolbar
                         buttons: [{
@@ -492,9 +492,18 @@ if (!isset($_SESSION['id'])) {
                         ordering: true, // Enable column ordering
                         responsive: true, // Make the table responsive
                         "order": [
-                            [7, 'asc']
-                        ]
+                            [7, 'desc']
+                        ],
+                        "createdRow": function(row, data, dataIndex) {
+                            if (parseFloat(data.points_acquired) < 0) {
+                                // Apply style to each cell in the row
+                                $(row).find('td').each(function() {
+                                    $(this).css('color', 'red'); // Add red font color
+                                });
+                            }
+                        }
                     });
+
 
                     // Show the Add Points modal
                     $('#addPointsModal').on('show.bs.modal', function() {
@@ -689,7 +698,7 @@ if (!isset($_SESSION['id'])) {
                                     $('#clientIdModal').modal('hide'); // Close the first modal
                                     $('#qrScannerModal').modal('hide'); // Close the first modal
                                     $('#clientInfoModal').modal('show'); // Show the client info modal
-                                } 
+                                }
                             },
                             error: function(xhr, status, error) {
                                 // Log any errors that occur during the request

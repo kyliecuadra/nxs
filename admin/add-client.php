@@ -82,9 +82,9 @@ require("../config/db_connection.php");
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">
-                                Email <span class="text-danger">*</span>
+                                Email
                             </label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter email address" required>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email address (optional)">
                         </div>
                         <div class="mb-3">
                             <label for="contactNumber" class="form-label">
@@ -137,84 +137,87 @@ require("../config/db_connection.php");
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
     <!-- Page JS -->
-<script>
-    $(document).ready(function() {
-        // Handle Save Client button click
-        $('#saveClientBtn').on('click', function() {
-            // Get form values
-    const username = $('#username').val().trim();
-    const name = $('#name').val().trim();
-    const email = $('#email').val().trim();
-    const contactNumber = $('#contactNumber').val().trim();
+    <script>
+        $(document).ready(function() {
+            // Handle Save Client button click
+            $('#saveClientBtn').on('click', function() {
+                // Get form values
+                const username = $('#username').val().trim();
+                const name = $('#name').val().trim();
+                const email = $('#email').val().trim();
+                const contactNumber = $('#contactNumber').val().trim();
 
-    const emailInput = $('#email');
-    const emailDomain = "@gmail.com";
-    
-    
-            // Check if required fields are filled
-            if (username && name && email) {
-                // Check if email ends with @gmail.com
-    if (!email.endsWith(emailDomain)) {
-        toastr.warning('Please use a valid @gmail.com email address.');
-        emailInput.css('border-color', 'red');  // Optional: change border to red for invalid email
-        return; 
-    } else {
-        emailInput.css('border-color', 'green');  // Optional: change border to green for valid email
-    }
+                const emailInput = $('#email');
+                const emailDomain = "@gmail.com";
 
-    // Validate other form fields (e.g., contact number) if necessary
-    var phonePattern = /^09\d{9}$/;
-    if (!phonePattern.test(contactNumber) && contactNumber != '') {
-        toastr.warning('Contact number must start with 09 and be 11 digits long.');
-        return; // Stop form submission if validation fails
-    }
-                // Show confirmation modal
-                $('#confirmationModal').modal('show');
-            } else {
-                toastr.error('Please fill in all required fields!');
-            }
 
-            
-        });
-        
+                // Check if required fields are filled
+                // Check if required fields are filled
+                if (username && name) {
+                    // Validate email only if it is provided
+                    if (email) {
+                        if (!email.endsWith(emailDomain)) {
+                            toastr.warning('Please use a valid @gmail.com email address.');
+                            emailInput.css('border-color', 'red'); // Optional: change border to red for invalid email
+                            return; // Stop further processing
+                        } else {
+                            emailInput.css('border-color', 'green'); // Optional: change border to green for valid email
+                        }
+                    }
 
-        // Handle confirmation of saving client
-        $('#confirmSaveBtn').on('click', function() {
-            // Get form values
-            const username = $('#username').val();
-            const name = $('#name').val();
-            const email = $('#email').val();
-            const contactNumber = $('#contactNumber').val();
-
-            // You can send the form data to the server using AJAX
-            $.ajax({
-                url: 'addClient.php', // Replace with your server endpoint
-                method: 'POST',
-                data: {
-                    username: username,
-                    name: name,
-                    email: email,
-                    contactNumber: contactNumber
-                },
-                success: function(response) {
-                    // Handle response (e.g., success message, redirect, etc.)
-                    toastr.success('Client added successfully!');
-                    $('#addClientForm')[0].reset(); // Reset the form
-                    $('#confirmationModal').modal('hide'); // Close the modal
-                },
-                error: function(xhr, status, error) {
-                    // Handle error (e.g., show error message)
-                    toastr.error('Username is already registered.');
+                    // Validate other form fields (e.g., contact number) if necessary
+                    var phonePattern = /^09\d{9}$/;
+                    if (!phonePattern.test(contactNumber) && contactNumber != '') {
+                        toastr.warning('Contact number must start with 09 and be 11 digits long.');
+                        return; // Stop form submission if validation fails
+                    }
+                    // Show confirmation modal
+                    $('#confirmationModal').modal('show');
+                } else {
+                    toastr.error('Please fill in all required fields!');
                 }
+
+
+            });
+
+
+            // Handle confirmation of saving client
+            $('#confirmSaveBtn').on('click', function() {
+                // Get form values
+                const username = $('#username').val();
+                const name = $('#name').val();
+                const email = $('#email').val();
+                const contactNumber = $('#contactNumber').val();
+
+                // You can send the form data to the server using AJAX
+                $.ajax({
+                    url: 'addClient.php', // Replace with your server endpoint
+                    method: 'POST',
+                    data: {
+                        username: username,
+                        name: name,
+                        email: email,
+                        contactNumber: contactNumber
+                    },
+                    success: function(response) {
+                        // Handle response (e.g., success message, redirect, etc.)
+                        toastr.success('Client added successfully!');
+                        $('#addClientForm')[0].reset(); // Reset the form
+                        $('#confirmationModal').modal('hide'); // Close the modal
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error (e.g., show error message)
+                        toastr.error('Username is already registered.');
+                    }
+                });
+            });
+
+            // Close modal on cancel button click
+            $('.btn-secondary').on('click', function() {
+                $('#confirmationModal').modal('hide');
             });
         });
-
-        // Close modal on cancel button click
-        $('.btn-secondary').on('click', function() {
-            $('#confirmationModal').modal('hide');
-        });
-    });
-</script>
+    </script>
 
     </script>
 </body>

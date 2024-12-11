@@ -1,7 +1,18 @@
 <?php
 require_once '../config/db_connection.php';
 
-$query = "SELECT client_id, username, name, email, contact_number, remaining_points, qr_code_path FROM clients";
+$query = "SELECT 
+            c.client_id, 
+            c.username, 
+            c.name AS client_name, 
+            c.email, 
+            c.contact_number, 
+            c.remaining_points, 
+            c.qr_code_path, 
+            c.registration_date, 
+            u.name AS registered_by
+        FROM clients c
+        INNER JOIN users u";
 $result = mysqli_query($conn, $query);
 
 $clients = [];

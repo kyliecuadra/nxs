@@ -386,6 +386,14 @@ if (!isset($_SESSION['id'])) {
         order: [
             [7, "desc"]
         ],
+        "createdRow": function(row, data, dataIndex) {
+        if (parseFloat(data.points_acquired) < 0) {
+            // Apply style to each cell in the row
+            $(row).find('td').each(function() {
+                $(this).css('color', 'red'); // Add red font color
+            });
+        }
+    }
     });
 
     // Function to parse the date from "Month Day, Year" format to Date object

@@ -184,6 +184,8 @@ if (!isset($_SESSION['id'])) {
                                         <th><strong>Email</strong></th>
                                         <th><strong>Contact Number</strong></th>
                                         <th><strong>Remaining Points</strong></th>
+                                        <th><strong>Registered By</strong></th>
+                                        <th><strong>Date Registered</strong></th>
                                         <th><strong>Action</strong></th>
                                     </tr>
                                 </thead>
@@ -304,6 +306,22 @@ if (!isset($_SESSION['id'])) {
                             },
                             {
                                 "data": "remaining_points"
+                            },
+                            {
+                                "data": "registered_by"
+                            },
+                            {
+                                "data": "registration_date",
+                                "render": function(data, type, row) {
+                                    // Parse the date string
+                                    const date = new Date(data);
+                                    // Format it as "Month Day, Year"
+                                    return date.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    });
+                                }
                             },
                             {
                                 "data": null,
