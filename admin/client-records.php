@@ -309,7 +309,7 @@ if (!isset($_SESSION['id'])) {
                                 "data": "username"
                             },
                             {
-                                "data": "name"
+                                "data": "client_name"
                             },
                             {
                                 "data": "email"

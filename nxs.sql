@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2024 at 03:40 AM
+-- Generation Time: Dec 14, 2024 at 02:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,6 +36,7 @@ CREATE TABLE `clients` (
   `contact_number` varchar(20) DEFAULT NULL,
   `remaining_points` int(10) NOT NULL DEFAULT 0,
   `qr_code_path` varchar(255) NOT NULL,
+  `registered_by` int(11) NOT NULL,
   `registration_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -103,7 +104,8 @@ INSERT INTO `users` (`user_id`, `username`, `name`, `email`, `contact_number`, `
 --
 ALTER TABLE `clients`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `client_id` (`client_id`);
+  ADD UNIQUE KEY `client_id` (`client_id`),
+  ADD KEY `fk_registered_by` (`registered_by`);
 
 --
 -- Indexes for table `client_activities`
@@ -135,7 +137,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `client_activities`
@@ -158,6 +160,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `clients`
+--
+ALTER TABLE `clients`
+  ADD CONSTRAINT `fk_registered_by` FOREIGN KEY (`registered_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `client_activities`
