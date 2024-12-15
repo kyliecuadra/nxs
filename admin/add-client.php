@@ -120,6 +120,27 @@ require("../config/db_connection.php");
             </div>
         </div>
 
+        <!-- Modal to display Client ID and QR Code -->
+<div class="modal fade" id="clientInfoModal" tabindex="-1" aria-labelledby="clientInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientInfoModalLabel">Client Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Client ID:</strong> <span id="clientIDDisplay"></span></p>
+                <p><strong>QR Code:</strong></p>
+                <img id="qrCodeImage" src="" alt="QR Code" class="img-fluid" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     </div>
 
     <!-- / Layout wrapper -->
@@ -182,35 +203,50 @@ require("../config/db_connection.php");
 
 
             // Handle confirmation of saving client
-            $('#confirmSaveBtn').on('click', function() {
-                // Get form values
-                const username = $('#username').val();
-                const name = $('#name').val();
-                const email = $('#email').val();
-                const contactNumber = $('#contactNumber').val();
+$('#confirmSaveBtn').on('click', function() {
+    // Get form values
+    const username = $('#username').val();
+    const name = $('#name').val();
+    const email = $('#email').val();
+    const contactNumber = $('#contactNumber').val();
 
-                // You can send the form data to the server using AJAX
-                $.ajax({
-                    url: 'addClient.php', // Replace with your server endpoint
-                    method: 'POST',
-                    data: {
-                        username: username,
-                        name: name,
-                        email: email,
-                        contactNumber: contactNumber
-                    },
-                    success: function(response) {
-                        // Handle response (e.g., success message, redirect, etc.)
-                        toastr.success('Client added successfully!');
-                        $('#addClientForm')[0].reset(); // Reset the form
-                        $('#confirmationModal').modal('hide'); // Close the modal
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error (e.g., show error message)
-                        toastr.error('Username is already registered.');
-                    }
-                });
-            });
+    // You can send the form data to the server using AJAX
+    $.ajax({
+        url: 'addClient.php', // Replace with your server endpoint
+        method: 'POST',
+        data: {
+            username: username,
+            name: name,
+            email: email,
+            contactNumber: contactNumber
+        },
+        success: function(response) {
+            // Parse the response
+            const data = JSON.parse(response);
+
+            if (data.status === 'success') {
+                // Display success message
+                toastr.success('Client added successfully!');
+                $('#addClientForm')[0].reset(); // Reset the form
+                $('#confirmationModal').modal('hide'); // Close the confirmation modal
+
+                // Display the new modal with Client ID and QR code
+                $('#clientIDDisplay').text(data.clientID); // Display the client ID in the modal
+                $('#qrCodeImage').attr('src', data.qrCodePath); // Display the QR code image in the modal
+
+                // Show the modal containing the client ID and QR code
+                $('#clientInfoModal').modal('show');
+            } else {
+                toastr.error('Error: ' + data.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            // Handle error (e.g., show error message)
+            toastr.error('Failed to add client. Please try again.');
+        }
+    });
+});
+
 
             // Close modal on cancel button click
             $('.btn-secondary').on('click', function() {

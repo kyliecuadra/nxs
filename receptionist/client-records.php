@@ -341,7 +341,7 @@ if (!isset($_SESSION['id'])) {
                         // Populate modal with client data
                         $('#clientId').val(rowData.client_id);
                         $('#username').val(rowData.username);
-                        $('#clientName').val(rowData.name);
+                        $('#clientName').val(rowData.client_name);
                         $('#email').val(rowData.email);
                         $('#clientContactNumber').val(rowData.contact_number);
                         $('#remainingPoints').val(rowData.remaining_points);

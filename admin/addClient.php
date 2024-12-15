@@ -77,7 +77,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     VALUES ('$clientID', '$username', '$name', '$email', '$contactNumber', '$qrCodePath', '" . $_SESSION['id'] . "', NOW())";
 
     if (mysqli_query($conn, $query)) {
-        echo json_encode(['status' => 'success', 'message' => 'Client added successfully!', 'qrCodePath' => $qrCodePath]);
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Client added successfully!',
+            'clientID' => $clientID,  // Include the client ID in the response
+            'qrCodePath' => $qrCodePath
+        ]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Failed to add client.']);
     }
