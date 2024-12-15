@@ -32,7 +32,6 @@ if (isset($_SESSION['id'])) {
 	<img class="wave" src="assets/img/wave.png">
 	<div class="container">
 		<div class="img">
-			<img src="assets/img/bg.svg">
 		</div>
 		<div class="login-content">
 			<form id="loginForm">
