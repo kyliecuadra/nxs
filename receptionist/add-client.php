@@ -178,24 +178,9 @@ if (!isset($_SESSION['id'])) {
                 const email = $('#email').val().trim();
                 const contactNumber = $('#contactNumber').val().trim();
 
-                const emailInput = $('#email');
-                const emailDomain = "@gmail.com";
-
-
                 // Check if required fields are filled
                 // Check if required fields are filled
                 if (username && name) {
-                    // Validate email only if it is provided
-                    if (email) {
-                        if (!email.endsWith(emailDomain)) {
-                            toastr.warning('Please use a valid @gmail.com email address.');
-                            emailInput.css('border-color', 'red'); // Optional: change border to red for invalid email
-                            return; // Stop further processing
-                        } else {
-                            emailInput.css('border-color', 'green'); // Optional: change border to green for valid email
-                        }
-                    }
-
                     // Validate other form fields (e.g., contact number) if necessary
                     var phonePattern = /^09\d{9}$/;
                     if (!phonePattern.test(contactNumber) && contactNumber != '') {
