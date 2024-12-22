@@ -2,15 +2,6 @@
 require("../config/db_connection.php");
 
 session_start();
-require("../config/session_timeout.php");
-
-if (!isset($_SESSION['id'])) {
-  header("location: ../config/not_login-error.html");
-} else {
-  if ($_SESSION['role'] != "receptionist") {
-    header("location: ../config/user_level-error.html");
-  }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
