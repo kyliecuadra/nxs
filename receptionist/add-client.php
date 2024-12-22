@@ -170,31 +170,36 @@ if (!isset($_SESSION['id'])) {
     <!-- Page JS -->
 <script>
     $(document).ready(function() {
-            // Handle Save Client button click
-            $('#saveClientBtn').on('click', function() {
-                // Get form values
-                const username = $('#username').val().trim();
-                const name = $('#name').val().trim();
-                const email = $('#email').val().trim();
-                const contactNumber = $('#contactNumber').val().trim();
+    // Handle Save Client button click
+    $('#saveClientBtn').on('click', function() {
+        // Get form values
+        const username = $('#username').val().trim();
+        const name = $('#name').val().trim();
+        const email = $('#email').val().trim();
+        const contactNumber = $('#contactNumber').val().trim();
 
-                // Check if required fields are filled
-                // Check if required fields are filled
-                if (username && name) {
-                    // Validate other form fields (e.g., contact number) if necessary
-                    var phonePattern = /^09\d{9}$/;
-                    if (!phonePattern.test(contactNumber) && contactNumber != '') {
-                        toastr.warning('Contact number must start with 09 and be 11 digits long.');
-                        return; // Stop form submission if validation fails
-                    }
-                    // Show confirmation modal
-                    $('#confirmationModal').modal('show');
-                } else {
-                    toastr.error('Please fill in all required fields!');
-                }
+        // Check if required fields are filled
+        if (username && name) {
+            // Validate email for @ and .com
+            const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+            if (!emailPattern.test(email) && email != '') {
+                toastr.warning('Please enter a valid email address with @ and .com.');
+                return; // Stop form submission if validation fails
+            }
 
+            // Validate contact number
+            var phonePattern = /^09\d{9}$/;
+            if (!phonePattern.test(contactNumber) && contactNumber != '') {
+                toastr.warning('Contact number must start with 09 and be 11 digits long.');
+                return; // Stop form submission if validation fails
+            }
 
-            });
+            // Show confirmation modal
+            $('#confirmationModal').modal('show');
+        } else {
+            toastr.error('Please fill in all required fields!');
+        }
+    });
 
 
             // Handle confirmation of saving client
