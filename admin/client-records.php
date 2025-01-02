@@ -344,7 +344,8 @@ if (!isset($_SESSION['id'])) {
                         paging: true,
                         searching: true,
                         ordering: true,
-                        responsive: true
+                        responsive: true,
+                        "order": [[7, 'desc']] 
                     });
 
                     // Event handler for "View" button

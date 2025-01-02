@@ -8,31 +8,33 @@ if (isset($_POST['client_id']) && isset($_POST['name']) && isset($_POST['contact
     $name = $_POST['name'];
     $contactNumber = $_POST['contact_number'];
 
-    // Prepare the SQL query to update client information
-    $sql = "UPDATE clients SET name = ?, contact_number = ? WHERE client_id = ?";
+    // Sanitize input to prevent SQL injection
+    $clientId = $conn->real_escape_string($clientId);
+    $name = $conn->real_escape_string($name);
+    $contactNumber = $conn->real_escape_string($contactNumber);
 
-    if ($stmt = $conn->prepare($sql)) {
-        // Bind the parameters to the query
-        $stmt->bind_param("ssi", $name, $contactNumber, $clientId);
-
-        // Execute the query
-        if ($stmt->execute()) {
+    // Prepare the SQL query to update client information using mysqli_query
+    $sql = "UPDATE clients SET name = '$name', contact_number = '$contactNumber' WHERE client_id = '$clientId'";
+    // Execute the query
+    if ($result = mysqli_query($conn, $sql)) {
+        // Check if any rows were updated
+        if (mysqli_affected_rows($conn) > 0) {
             // Send a success response
             echo json_encode(['success' => true]);
         } else {
-            // Send an error response
-            echo json_encode(['success' => false, 'message' => 'Failed to update the client.']);
+            // If no rows were affected, the client ID might not exist
+            echo json_encode(['success' => false, 'message' => 'No records updated, client ID may not exist.']);
         }
-
-        $stmt->close();
     } else {
-        // Handle SQL preparation error
-        echo json_encode(['success' => false, 'message' => 'Failed to prepare the query.']);
+        // Send an error response
+        echo json_encode(['success' => false, 'message' => 'Failed to update the client.']);
     }
+
 } else {
     // Handle missing data
     echo json_encode(['success' => false, 'message' => 'Invalid input data.']);
 }
 
+// Close the connection
 $conn->close();
 ?>
