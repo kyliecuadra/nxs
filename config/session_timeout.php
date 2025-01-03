@@ -7,7 +7,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
     // User has been inactive for too long, log them out
     session_unset();     // unset $_SESSION variable for the run-time 
     session_destroy();   // destroy session data in storage
-    header("location: logout.php");
+    header("location: ../config/logout.php");
     exit();
 }
 
