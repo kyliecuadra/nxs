@@ -1,6 +1,8 @@
 <?php
 require("../config/db_connection.php");
 
+session_start();
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"

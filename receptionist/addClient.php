@@ -2,6 +2,7 @@
 // Include the necessary files from the PHP QR Code library
 require_once '../config/phpqrcode/qrlib.php';  // Adjust the path to where the phpqrcode directory is located
 session_start();
+
 // Function to generate the client ID
 function generateClientID($conn) {
     $currentYear = date("Y");
@@ -52,7 +53,6 @@ function generateQRCode($clientID) {
     }
 }
 
-
 require("../config/db_connection.php");
 
 // Check if the data is sent via POST
@@ -62,8 +62,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $contactNumber = isset($_POST['contactNumber']) ? $_POST['contactNumber'] : '';
 
+    // Check if username is provided
     if (empty($username) || empty($name)) {
         echo json_encode(['status' => 'error', 'message' => 'Username, name, and email are required.']);
+        exit;
+    }
+
+    // Check if the username already exists in the database
+    $checkUsernameQuery = "SELECT id FROM clients WHERE username = '$username' LIMIT 1";
+    $checkResult = mysqli_query($conn, $checkUsernameQuery);
+
+    if ($checkResult && mysqli_num_rows($checkResult) > 0) {
+        // Username already exists
+        echo json_encode(['status' => 'error', 'message' => 'Username already exists. Please choose another username.']);
         exit;
     }
 
@@ -75,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert client data into the database
     $query = "INSERT INTO clients (client_id, username, name, email, contact_number, qr_code_path, registered_by, registration_date) 
     VALUES ('$clientID', '$username', '$name', '$email', '$contactNumber', '$qrCodePath', '" . $_SESSION['id'] . "', NOW())";
-
 
     if (mysqli_query($conn, $query)) {
         echo json_encode([
