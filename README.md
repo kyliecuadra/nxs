@@ -59,7 +59,7 @@ The **NXS Spa Web-Based Pointing/Management System** is a web-based management t
   - Ensure proper file permissions for read and write access.
 5. **Access the System:**
 
-  -Open a web browser and navigate to http://localhost/spa_system to start using the system.
+  -Open a web browser and navigate to http://localhost/nxs to start using the system.
 
 ## **Usage**
 1. **Receptionist Registration:**
