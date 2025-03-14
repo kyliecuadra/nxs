@@ -40,7 +40,7 @@ The **NXS Spa Web-Based Pointing/Management System** is a web-based management t
 
 1. **Clone the repository**:
    ```bash
-   git clone [<repository_url>](https://github.com/kyliecuadra/nxs)
+   git clone https://github.com/kyliecuadra/nxs
    ```
 2. **Install XAMPP (if not already installed):**:
 
